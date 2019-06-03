@@ -14,6 +14,9 @@ async def fullTask(urlToDownload, urlToSend):
 
 async def getWeatherFromCity(url):
     r = requests.get(url)
+    file = open("haslo.txt", "r")
+    haslo = file.read()
+    print(haslo)
     loc_weather = r.content.strip()
     tmp = json.loads(loc_weather)
     dataToSend =[]
@@ -21,16 +24,15 @@ async def getWeatherFromCity(url):
         if item == 'list':
             for data in tmp[item]:
                 dataToSend.append(data['main']['temp'])
-                dataToSend.append(data['wind']['speed'])
-        if item == 'city':
-            dataToSend.append(tmp[item]['name'])
-            dataToSend.append(tmp[item]['country'])
+                dataToSend.append(data['main']['humidity'])
+                dataToSend.append(data['main']['pressure'])
 
+    dataToSend.append(1234)
     jsonToSend = {
         "temperature": dataToSend[0],
-        "wind": dataToSend[1],
-        "city": dataToSend[2],
-        "country": dataToSend[3]
+        "humidity": dataToSend[1],
+        "pressure": dataToSend[2],
+        "id": dataToSend[3]
     }
     print(json.dumps(jsonToSend))
     print(dataToSend)
